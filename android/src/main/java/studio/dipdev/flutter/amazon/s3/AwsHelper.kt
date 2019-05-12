@@ -22,30 +22,17 @@ import java.util.Locale
 
 class AwsHelper(private val context: Context, private val onUploadCompleteListener: OnUploadCompleteListener, private val BUCKET_NAME: String, private val IDENTITY_POOL_ID: String, private val KEY: String) {
 
-    private var transferUtility: TransferUtility
-
-    init {
-        val credentialsProvider = CognitoCachingCredentialsProvider(context, IDENTITY_POOL_ID, Regions.AP_SOUTH_1)
-
-        val amazonS3Client = AmazonS3Client(credentialsProvider)
-        amazonS3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.AP_SOUTH_1))
-        transferUtility = TransferUtility(amazonS3Client, context)
-    }
-
-    private val uploadedUrl: String
-        get() = getUploadedUrl(KEY)
-
     private fun getUploadedUrl(key: String?): String {
         return String.format(Locale.getDefault(), URL_TEMPLATE, BUCKET_NAME, key)
     }
 
     @Throws(UnsupportedEncodingException::class)
     fun uploadImage(image: File): String {
-        val credentialsProvider = CognitoCachingCredentialsProvider(context, IDENTITY_POOL_ID, Regions.AP_SOUTH_1)
+        val credentialsProvider = CognitoCachingCredentialsProvider(context, IDENTITY_POOL_ID, Regions.EU_WEST_1)
 
         val amazonS3Client = AmazonS3Client(credentialsProvider)
-        amazonS3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.AP_SOUTH_1))
-        transferUtility = TransferUtility(amazonS3Client, context)
+        amazonS3Client.setRegion(com.amazonaws.regions.Region.getRegion(Regions.EU_WEST_1))
+        val transferUtility = TransferUtility(amazonS3Client, context)
 
         val transferObserver = transferUtility.upload(BUCKET_NAME, KEY, image)
 
@@ -64,7 +51,7 @@ class AwsHelper(private val context: Context, private val onUploadCompleteListen
                 Log.e(TAG, "error in upload id [ " + id + " ] : " + ex.message)
             }
         })
-        return uploadedUrl
+        return getUploadedUrl(KEY)
     }
 
     @Throws(UnsupportedEncodingException::class)
@@ -79,6 +66,6 @@ class AwsHelper(private val context: Context, private val onUploadCompleteListen
 
     companion object {
         private val TAG = AwsHelper::class.java.simpleName
-        private const val URL_TEMPLATE = "https://s3.amazonaws.com/%s/%s"
+        private const val URL_TEMPLATE = "https://s3-eu-west-1.amazonaws.com/%s/%s"
     }
 }

@@ -16,22 +16,23 @@ public class SwiftFlutterAmazonS3Plugin: NSObject, FlutterPlugin {
             let imagePath = arguments!["filePath"] as? String
             let bucket = arguments!["bucket"] as? String
             let identity = arguments!["identity"] as? String
+            let filename = arguments!["filename"] as? String
 
             var imageAmazonUrl = ""
             let fileUrl = NSURL(fileURLWithPath: imagePath!)
 
             let uploadRequest = AWSS3TransferManagerUploadRequest()
             uploadRequest?.bucket = bucket
-            uploadRequest?.key = nameGenerator()
+            uploadRequest?.key = filename
             uploadRequest?.contentType = "image/jpeg"
             uploadRequest?.body = fileUrl as URL
             uploadRequest?.acl = .publicReadWrite
 
             let credentialsProvider = AWSCognitoCredentialsProvider(
-                regionType: AWSRegionType.USEast1,
+                regionType: AWSRegionType.EUWest1,
                 identityPoolId: identity!)
             let configuration = AWSServiceConfiguration(
-                region: AWSRegionType.USEast1,
+                region: AWSRegionType.EUWest1,
                 credentialsProvider: credentialsProvider)
             AWSServiceManager.default().defaultServiceConfiguration = configuration
 
@@ -40,7 +41,7 @@ public class SwiftFlutterAmazonS3Plugin: NSObject, FlutterPlugin {
                     print("❌ Upload failed (\(error))")
                 }
                 if task.result != nil {
-                    imageAmazonUrl = "https://s3.amazonaws.com/\(bucket!)/\(uploadRequest!.key!)"
+                    imageAmazonUrl = "https://s3-eu-west-1.amazonaws.com/\(bucket!)/\(uploadRequest!.key!)"
                     print("✅ Upload successed (\(imageAmazonUrl))")
                 } else {
                     print("❌ Unexpected empty result.")
@@ -49,13 +50,5 @@ public class SwiftFlutterAmazonS3Plugin: NSObject, FlutterPlugin {
                 return nil
             }
         }
-    }
-    
-    public func nameGenerator() -> String{
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "ddMMyyyy"
-        let result = formatter.string(from: date)
-        return "IMG" + result + String(Int64(date.timeIntervalSince1970 * 1000)) + "jpeg"
     }
 }

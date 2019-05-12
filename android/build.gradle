@@ -28,8 +28,7 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 21
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        minSdkVersion 16
     }
     lintOptions {
         disable 'InvalidPackage'

@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
 flutter:
   plugin:
     androidPackage: studio.dipdev.flutter.amazon.s3
