@@ -16,14 +16,14 @@ public class SwiftFlutterAmazonS3Plugin: NSObject, FlutterPlugin {
             let imagePath = arguments!["filePath"] as? String
             let bucket = arguments!["bucket"] as? String
             let identity = arguments!["identity"] as? String
-            let filename = arguments!["filename"] as? String
+            let key = arguments!["key"] as? String
 
             var imageAmazonUrl = ""
             let fileUrl = NSURL(fileURLWithPath: imagePath!)
 
             let uploadRequest = AWSS3TransferManagerUploadRequest()
             uploadRequest?.bucket = bucket
-            uploadRequest?.key = filename
+            uploadRequest?.key = key
             uploadRequest?.contentType = "image/jpeg"
             uploadRequest?.body = fileUrl as URL
             uploadRequest?.acl = .publicReadWrite
