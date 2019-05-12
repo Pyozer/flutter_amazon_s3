@@ -1,19 +1,13 @@
 package studio.dipdev.flutter.amazon.s3
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
-import android.util.Base64
-import android.widget.Toast
-import com.amazonaws.AmazonWebServiceClient
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility
 import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3Client
 
 import java.io.File
@@ -52,11 +46,6 @@ class AwsHelper(private val context: Context, private val onUploadCompleteListen
             }
         })
         return getUploadedUrl(KEY)
-    }
-
-    @Throws(UnsupportedEncodingException::class)
-    fun clean(filePath: String): String {
-        return filePath.replace("[^A-Za-z0-9 ]".toRegex(), "")
     }
 
     interface OnUploadCompleteListener {
